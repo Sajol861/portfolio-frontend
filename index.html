@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sajol Shutro Dhor - Digital Marketer</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* Custom Styles & Color Variables */
+        :root {
+            --bg-color: #1f2020;
+            --text-color: #E5E5E5;
+            --primary-color: #a0c4ff; /* Pastel Sky Blue */
+            --secondary-color: #ffffff; /* White */
+            --card-bg: rgba(42, 42, 42, 0.8);
+            --scrollbar-track: #111111;
+            --timeline-content-bg: #2a2a2a;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scrollbar from animations */
+        }
+        
+        #animated-header {
+            width: 100%;
+            height: 96px; /* 6rem */
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            transition: transform 0.3s ease-out;
+        }
+
+        #main-content {
+            padding-top: 96px; /* Adjust based on header height */
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--primary-color), #cbf3f0);
+            border-radius: 10px;
+        }
+
+        /* Gradient Text and Backgrounds */
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(90deg, var(--primary-color), #cbf3f0);
+        }
+        
+        /* Card Background */
+        .card-bg {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Progress Bar Style */
+        .progress-bar-fill {
+            background: linear-gradient(90deg, var(--primary-color), #8ecae6);
+            transition: width 0.8s ease-in-out;
+            width: 0%; /* Initial width */
+        }
+
+        /* Animation Styles */
+        .reveal {
+            opacity: 0;
+            transition: all 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+        .reveal.from-bottom {
+            transform: translateY(50px);
+        }
+        .reveal.from-left {
+            transform: translateX(-50px);
+        }
+        .reveal.from-right {
+            transform: translateX(50px);
+        }
+        .reveal.zoom-in {
+            transform: scale(0.9);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: none;
+        }
+        
+        /* Disable interaction with images */
+        .lock-image {
+            pointer-events: none;
+            -webkit-user-select: none; /* Safari */
+            -ms-user-select: none; /* IE 10+ */
+            user-select: none;
+        }
+        
+        /* Custom Justify Text for About Me */
+        .text-justify-custom {
+            text-align: justify;
+            text-align-last: left;
+            -moz-text-align-last: left;
+        }
+        
+        /* Timeline Style */
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2rem;
+            padding-left: 2.5rem;
+        }
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 2px;
+            height: 100%;
+            background: #4a4a4a;
+        }
+         .timeline-item:after {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 5px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: linear-gradient(90deg, var(--primary-color), #8ecae6);
+            border: 3px solid var(--bg-color);
+            z-index: 1;
+        }
+        .timeline-content {
+            background-color: var(--timeline-content-bg);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+        }
+        
+        /* Education Timeline Style */
+        .education-timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        .education-timeline:before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #4a4a4a;
+        }
+        .education-item {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        .education-item:last-child {
+            margin-bottom: 0;
+        }
+        .education-icon {
+            position: absolute;
+            left: -8px;
+            top: 4px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: var(--bg-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Header Scroll Behavior */
+        header.header-hidden {
+            transform: translateY(-100%);
+        }
+
+        /* Gemini Loader */
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid #FFF;
+            border-bottom-color: var(--primary-color);
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Bengali Font for AI Section */
+        .bengali-font {
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+        
+        /* SEO Report Styling */
+        #seo-report h3 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        #seo-report ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        #seo-report li {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: flex-start;
+        }
+        #seo-report li::before {
+            content: '✓';
+            color: var(--primary-color);
+            margin-right: 0.75rem;
+            font-weight: bold;
+        }
+
+        /* Accordion Styling */
+        .accordion-content {
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+            max-height: 0;
+            overflow: hidden;
+            padding: 0 1rem;
+        }
+
+        .accordion-header.active + .accordion-content {
+            max-height: 500px; /* Adjust as needed */
+            padding: 0 1rem 1rem 1rem;
+        }
+        .accordion-header.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+    </style>
+</head>
+<body class="antialiased">
+    
+    <header id="animated-header">
+        <img src="https://i.postimg.cc/cHN6h1HL/Purple-Sky-Profile-Header.jpg" alt="Header background" class="w-full h-full object-cover">
+    </header>
+
+    <div id="main-content" class="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+
+        <section id="hero" class="min-h-screen flex items-center">
+            <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12 w-full py-12 md:py-20">
+                <div class="w-[200px] h-[267px] md:w-[300px] md:h-[400px] flex-shrink-0 reveal from-left">
+                    <img src="https://i.postimg.cc/2ygY1yLx/retouch-2025081121252819.jpg" alt="Sajol Shutro Dhor Profile Picture" class="w-full h-full object-cover rounded-3xl border-4 border-sky-400/50">
+                </div>
+                <div class="text-center md:text-left reveal from-right">
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight uppercase whitespace-nowrap text-white">Sajol Shutro Dhor</h1>
+                    <div class="mt-6">
+                        <h2 class="text-2xl font-bold gradient-text mb-3">ABOUT ME</h2>
+                        <blockquote class="border-l-4 border-sky-400 pl-6">
+                            <p class="hidden md:block text-justify-custom text-gray-300 leading-relaxed italic">
+                                As a passionate digital marketer with over two years of proven experience, I specialize in helping brands achieve sustainable growth through AI-powered strategies, advanced SEO, and high-converting paid campaigns. My expertise spans across search engine optimization, social media strategy, and data-driven advertising, enabling me to craft campaigns that not only attract but also engage and convert the right audiences. With a balance of academic learning and real-world execution, I bring a results-focused approach to every project, consistently driving measurable success and long-term brand impact.
+                            </p>
+                            <p class="block md:hidden text-justify-custom text-gray-300 leading-relaxed italic">
+                                I drive sustainable brand growth through AI-powered strategies, advanced SEO, and high-converting campaigns.
+                            </p>
+                        </blockquote>
+                    </div>
+                    <div class="mt-8">
+                        <a href="javascript:void(0)" onclick="downloadCV()" class="inline-block gradient-bg text-slate-900 font-semibold py-3 px-8 rounded-lg shadow-lg hover:scale-105 transform transition-transform duration-300">
+                           <i class="fas fa-download mr-2"></i> Download CV
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="mt-16 md:mt-24">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 gradient-text reveal from-bottom">My Skills</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card-bg p-6 rounded-xl border border-gray-700 reveal zoom-in flex flex-col" style="transition-delay: 100ms;">
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-4">Digital Marketing & Strategy</h3>
+                        <ul class="list-none space-y-2 text-gray-300">
+                            <li class="flex items-center"><i class="fa-solid fa-check text-sky-400 mr-3"></i>AI-powered marketing & automation</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check text-sky-400 mr-3"></i>Marketing funnel optimization & CRO</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check text-sky-400 mr-3"></i>Competitor & market research</li>
+                        </ul>
+                    </div>
+                    <div class="mt-auto pt-6">
+                        <div class="bg-gray-700 rounded-full h-8 p-1 flex items-center">
+                             <div class="progress-bar-fill h-6 rounded-full flex items-center justify-center text-sm font-bold text-slate-900" data-progress="89">
+                                <i class="fa-solid fa-brain mr-2 ml-2"></i> 89%
+                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-bg p-6 rounded-xl border border-gray-700 reveal zoom-in flex flex-col" style="transition-delay: 200ms;">
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-4">Search Engine Optimization</h3>
+                        <ul class="list-none space-y-2 text-gray-300">
+                            <li class="flex items-center"><i class="fa-solid fa-check text-sky-400 mr-3"></i>Advanced keyword research & clustering</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check text-sky-400 mr-3"></i>On-page & technical SEO optimization</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check text-sky-400 mr-3"></i>Content optimization for ranking</li>
+                        </ul>
+                    </div>
+                    <div class="mt-auto pt-6">
+                        <div class="bg-gray-700 rounded-full h-8 p-1 flex items-center">
+                             <div class="progress-bar-fill h-6 rounded-full flex items-center justify-center text-sm font-bold text-slate-900" data-progress="85">
+                                <i class="fa-solid fa-magnifying-glass-chart mr-2 ml-2"></i> 85%
+                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-bg p-6 rounded-xl border border-gray-700 reveal zoom-in flex flex-col" style="transition-delay: 300ms;">
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-4">Paid Advertising</h3>
+                        <ul class="list-none space-y-2 text-gray-300">
+                            <li class="flex items-center"><i class="fa-solid fa-check text-sky-400 mr-3"></i>Google Ads (Search, Display, Video)</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check text-sky-400 mr-3"></i>Meta Ads (Facebook & Instagram)</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check text-sky-400 mr-3"></i>TikTok Ads strategy & execution</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check text-sky-400 mr-3"></i>A/B testing & ROI-driven ad optimization</li>
+                        </ul>
+                    </div>
+                    <div class="mt-auto pt-6">
+                        <div class="bg-gray-700 rounded-full h-8 p-1 flex items-center">
+                             <div class="progress-bar-fill h-6 rounded-full flex items-center justify-center text-sm font-bold text-slate-900" data-progress="88">
+                                <i class="fa-solid fa-bullhorn mr-2 ml-2"></i> 88%
+                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-bg p-6 rounded-xl border border-gray-700 reveal zoom-in flex flex-col" style="transition-delay: 400ms;">
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-4">Content & Social Media Marketing</h3>
+                        <ul class="list-none space-y-2 text-gray-300">
+                            <li class="flex items-center"><i class="fa-solid fa-check text-sky-400 mr-3"></i>Social media strategy & content planning</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check text-sky-400 mr-3"></i>Copywriting for ads & SEO-friendly blogs</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check text-sky-400 mr-3"></i>Creative design using Canva</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check text-sky-400 mr-3"></i>Social media engagement & community growth</li>
+                        </ul>
+                    </div>
+                    <div class="mt-auto pt-6">
+                        <div class="bg-gray-700 rounded-full h-8 p-1 flex items-center">
+                             <div class="progress-bar-fill h-6 rounded-full flex items-center justify-center text-sm font-bold text-slate-900" data-progress="83">
+                                <i class="fa-solid fa-share-nodes mr-2 ml-2"></i> 83%
+                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-bg p-6 rounded-xl border border-gray-700 reveal zoom-in flex flex-col" style="transition-delay: 500ms;">
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-4">Data & Analytics</h3>
+                        <ul class="list-none space-y-2 text-gray-300">
+                            <li class="flex items-center"><i class="fa-solid fa-check text-sky-400 mr-3"></i>Google Analytics 4 & Looker Studio</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check text-sky-400 mr-3"></i>Campaign performance tracking & insights</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check text-sky-400 mr-3"></i>Email marketing</li>
+                        </ul>
+                    </div>
+                    <div class="mt-auto pt-6">
+                        <div class="bg-gray-700 rounded-full h-8 p-1 flex items-center">
+                             <div class="progress-bar-fill h-6 rounded-full flex items-center justify-center text-sm font-bold text-slate-900" data-progress="90">
+                                <i class="fa-solid fa-chart-line mr-2 ml-2"></i> 90%
+                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-bg p-6 rounded-xl border border-gray-700 reveal zoom-in flex flex-col" style="transition-delay: 600ms;">
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-4">Professional Skills</h3>
+                        <ul class="list-none space-y-2 text-gray-300">
+                            <li class="flex items-center"><i class="fa-solid fa-check text-sky-400 mr-3"></i>Strong communication & teamwork</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check text-sky-400 mr-3"></i>Problem-solving & adaptability</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check text-sky-400 mr-3"></i>Project & time management</li>
+                        </ul>
+                    </div>
+                    <div class="mt-auto pt-6">
+                        <div class="bg-gray-700 rounded-full h-8 p-1 flex items-center">
+                             <div class="progress-bar-fill h-6 rounded-full flex items-center justify-center text-sm font-bold text-slate-900" data-progress="80">
+                                <i class="fa-solid fa-user-tie mr-2 ml-2"></i> 80%
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-16 md:my-24 border-gray-700 reveal from-bottom">
+        
+        <section id="gemini-feature" class="mt-16 md:mt-24">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 gradient-text reveal from-bottom">✨ AI Marketing Idea Generator</h2>
+            <div class="max-w-2xl mx-auto card-bg p-8 rounded-xl border border-gray-700 reveal from-bottom" style="transition-delay: 200ms;">
+                <p class="text-center text-gray-300 mb-4 bengali-font">আপনার ব্যবসার ধরন লিখুন এবং দেখুন কিভাবে AI আপনার জন্য মার্কেটিং আইডিয়া তৈরি করে।</p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <input type="text" id="business-input" placeholder="যেমন: local coffee shop, e-commerce clothing brand" class="w-full bg-black/20 border border-gray-600 rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-sky-500">
+                    <button id="generate-ideas-btn" class="gradient-bg text-slate-900 font-semibold py-3 px-6 rounded-lg shadow-lg hover:scale-105 transform transition-transform duration-300 whitespace-nowrap">Generate Ideas</button>
+                </div>
+                <div id="loader" class="text-center mt-6 hidden">
+                    <span class="loader"></span>
+                </div>
+                <div id="ideas-output" class="mt-6 space-y-4"></div>
+            </div>
+        </section>
+        
+        <hr class="my-16 md:my-24 border-gray-700 reveal from-bottom">
+        
+        <section id="seo-analyzer" class="mt-16 md:mt-24">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 gradient-text reveal from-bottom">🚀 AI Powered SEO Analyzer</h2>
+            <div class="max-w-2xl mx-auto card-bg p-8 rounded-xl border border-gray-700 reveal from-bottom" style="transition-delay: 200ms;">
+                <p class="text-center text-gray-300 mb-4">যেকোনো ওয়েবসাইটের URL দিন এবং AI দ্বারা তৈরি SEO রিপোর্ট পান।</p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <input type="url" id="url-input" placeholder="https://example.com" class="w-full bg-black/20 border border-gray-600 rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-sky-500">
+                    <button id="analyze-btn" class="gradient-bg text-slate-900 font-semibold py-3 px-6 rounded-lg shadow-lg hover:scale-105 transform transition-transform duration-300 whitespace-nowrap">Analyze SEO</button>
+                </div>
+                <div id="seo-loader" class="text-center mt-6 hidden">
+                    <span class="loader"></span>
+                    <p id="progress-text" class="text-gray-400 mt-2"></p>
+                </div>
+                <div id="seo-report" class="mt-6 text-gray-300"></div>
+            </div>
+        </section>
+
+        <hr class="my-16 md:my-24 border-gray-700 reveal from-bottom">
+
+        <section id="experience">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 gradient-text reveal from-bottom">Work Experience</h2>
+            <div class="max-w-3xl mx-auto">
+                <div class="timeline-item reveal from-bottom">
+                    <div class="timeline-content">
+                        <h3 class="text-xl font-bold text-white">DM Executive <span class="text-sky-400 font-semibold">@ Marketorr</span></h3>
+                        <p class="text-gray-400 mb-3">Jan 2024 – Jul 2025 (Full-Time)</p>
+                        <ul class="list-none space-y-2 text-gray-300">
+                           <li class="flex items-start"><i class="fa-solid fa-caret-right text-sky-400 mr-3 mt-1"></i>Boosted organic traffic by 120% via SEO</li>
+                           <li class="flex items-start"><i class="fa-solid fa-caret-right text-sky-400 mr-3 mt-1"></i>Managed Google, Meta & TikTok ad campaigns (4.5x ROI)</li>
+                           <li class="flex items-start"><i class="fa-solid fa-caret-right text-sky-400 mr-3 mt-1"></i>Increased social media engagement by 80%</li>
+                           <li class="flex items-start"><i class="fa-solid fa-caret-right text-sky-400 mr-3 mt-1"></i>Conducted competitor & market research</li>
+                           <li class="flex items-start"><i class="fa-solid fa-caret-right text-sky-400 mr-3 mt-1"></i>Optimized funnels, raised conversions by 35%</li>
+                           <li class="flex items-start"><i class="fa-solid fa-caret-right text-sky-400 mr-3 mt-1"></i>Managed email campaigns (35% open rate, 12% CTR)</li>
+                           <li class="flex items-start"><i class="fa-solid fa-caret-right text-sky-400 mr-3 mt-1"></i>Monthly reports via GA4 & Looker Studio</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item reveal from-bottom" style="transition-delay: 200ms;">
+                     <div class="timeline-content">
+                        <h3 class="text-xl font-bold text-white">DM Intern <span class="text-sky-400 font-semibold">@ Trusted IT Institute</span></h3>
+                        <p class="text-gray-400 mb-3">Jun 2023 – Dec 2023 (Internship)</p>
+                        <ul class="list-none space-y-2 text-gray-300">
+                           <li class="flex items-start"><i class="fa-solid fa-caret-right text-sky-400 mr-3 mt-1"></i>Keyword research & on-page SEO optimization</li>
+                           <li class="flex items-start"><i class="fa-solid fa-caret-right text-sky-400 mr-3 mt-1"></i>Assisted in Google Ads & Facebook Ads setup</li>
+                           <li class="flex items-start"><i class="fa-solid fa-caret-right text-sky-400 mr-3 mt-1"></i>Social media content creation & scheduling</li>
+                           <li class="flex items-start"><i class="fa-solid fa-caret-right text-sky-400 mr-3 mt-1"></i>Ad creatives & infographics using Canva</li>
+                           <li class="flex items-start"><i class="fa-solid fa-caret-right text-sky-400 mr-3 mt-1"></i>Weekly performance report preparation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-16 md:my-24 border-gray-700 reveal from-bottom">
+
+        <section id="certifications">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 gradient-text reveal from-bottom">Licenses & Certifications</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div class="card-bg p-6 rounded-xl border border-gray-700 flex flex-col items-start reveal from-left">
+                    <h3 class="text-xl font-bold text-white">Digital Marketing Certification Course</h3>
+                    <p class="text-gray-400 mt-1">HubSpot Academy</p>
+                    <p class="text-gray-500 text-sm mt-1">Issued Aug 2025 · Expires Sep 2026</p>
+                    <p class="text-gray-500 text-sm mt-1">Credential ID: cbf16a19f6fM120b3b27dcb54a928b4</p>
+                    <a href="https://app-na2.hubspot.com/academy/achievements/g0v48lyk/en/1/mr-sajol/digital-marketing" target="_blank" class="mt-4 inline-block gradient-bg text-slate-900 text-sm font-semibold py-2 px-5 rounded-lg hover:scale-105 transform transition-transform duration-300">
+                        Show Credential <i class="fas fa-arrow-up-right-from-square ml-1"></i>
+                    </a>
+                    <img src="https://i.postimg.cc/J4s5NnSW/Digital-Marketing-Certification-Course.png" alt="Hubspot Certificate" class="mt-6 rounded-lg w-full lock-image" oncontextmenu="return false;">
+                </div>
+                <div class="card-bg p-6 rounded-xl border border-gray-700 flex flex-col items-start reveal from-right">
+                    <h3 class="text-xl font-bold text-white">Google Digital Marketing & E-commerce</h3>
+                    <p class="text-gray-400 mt-1">Coursera</p>
+                    <p class="text-gray-500 text-sm mt-1">Issued Aug 2025</p>
+                    <p class="text-gray-500 text-sm mt-1">Credential ID: Y9K05RUXN1BL</p>
+                    <a href="https://www.coursera.org/account/accomplishments/professional-cert/Y9K05RUXN1BL" target="_blank" class="mt-4 inline-block gradient-bg text-slate-900 text-sm font-semibold py-2 px-5 rounded-lg hover:scale-105 transform transition-transform duration-300">
+                        Show Credential <i class="fas fa-arrow-up-right-from-square ml-1"></i>
+                    </a>
+                    <img src="https://i.postimg.cc/NfXdHDyc/Google-Digital-Marketing-E-commerce-Professional-Certificate-page-0001.jpg" alt="Google Certificate" class="mt-6 rounded-lg w-full lock-image" oncontextmenu="return false;">
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-16 md:my-24 border-gray-700 reveal from-bottom">
+
+        <section id="work">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 gradient-text reveal from-bottom">Featured Work</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                <div class="reveal zoom-in card-bg p-4 rounded-xl border border-gray-700" style="transition-delay: 100ms;">
+                    <img src="https://i.postimg.cc/y8sSpbtT/1.jpg" alt="Google Ads" class="rounded-lg w-full lock-image" oncontextmenu="return false;">
+                    <h3 class="text-center mt-4 font-semibold text-white">Google Ads</h3>
+                </div>
+                 <div class="reveal zoom-in card-bg p-4 rounded-xl border border-gray-700" style="transition-delay: 200ms;">
+                    <img src="https://i.postimg.cc/ZqLjkzKY/2.jpg" alt="Google Search Console" class="rounded-lg w-full lock-image" oncontextmenu="return false;">
+                    <h3 class="text-center mt-4 font-semibold text-white">Google Search Console</h3>
+                </div>
+                <div class="reveal zoom-in card-bg p-4 rounded-xl border border-gray-700" style="transition-delay: 300ms;">
+                    <img src="https://i.postimg.cc/k55Rqtn6/3.jpg" alt="WordPress Revenue" class="rounded-lg w-full lock-image" oncontextmenu="return false;">
+                    <h3 class="text-center mt-4 font-semibold text-white">WordPress Revenue</h3>
+                </div>
+                <div class="reveal zoom-in card-bg p-4 rounded-xl border border-gray-700" style="transition-delay: 400ms;">
+                    <img src="https://i.postimg.cc/Kz61PqtB/4.jpg" alt="Facebook Ads Campaign" class="rounded-lg w-full lock-image" oncontextmenu="return false;">
+                    <h3 class="text-center mt-4 font-semibold text-white">Facebook Ads Campaign</h3>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-16 md:my-24 border-gray-700 reveal from-bottom">
+
+        <section id="education-language">
+             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="reveal from-left">
+                    <h2 class="text-3xl font-bold mb-8 gradient-text text-center md:text-left">Education</h2>
+                    <div class="education-timeline">
+                        <div class="education-item">
+                            <div class="education-icon">
+                                <i class="fas fa-graduation-cap text-sky-400"></i>
+                            </div>
+                            <div class="pl-8">
+                                <p class="text-sky-400 font-bold">2025</p>
+                                <h3 class="font-semibold text-white">Honours 1st Year</h3>
+                                <p class="text-gray-400">Govt. Debendra College, Manikganj</p>
+                            </div>
+                        </div>
+                         <div class="education-item">
+                            <div class="education-icon">
+                                <i class="fas fa-graduation-cap text-sky-400"></i>
+                            </div>
+                            <div class="pl-8">
+                                <p class="text-sky-400 font-bold">2024</p>
+                                <h3 class="font-semibold text-white">H.S.C (GPA 4.42)</h3>
+                                <p class="text-gray-400">Govt. Debendra College, Manikganj</p>
+                            </div>
+                        </div>
+                         <div class="education-item">
+                            <div class="education-icon">
+                                <i class="fas fa-graduation-cap text-sky-400"></i>
+                            </div>
+                            <div class="pl-8">
+                                <p class="text-sky-400 font-bold">2022</p>
+                                <h3 class="font-semibold text-white">S.S.C (GPA 4.89)</h3>
+                                <p class="text-gray-400">Dhakai Jora High School</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="reveal from-right">
+                    <h2 class="text-3xl font-bold mb-8 gradient-text text-center md:text-left">Language</h2>
+                    <div class="space-y-4">
+                        <div class="card-bg p-4 rounded-xl border border-gray-700 flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="w-10 flex justify-center">
+                                    <i class="fas fa-globe text-2xl text-sky-400"></i>
+                                </div>
+                                <h3 class="font-semibold text-white text-lg ml-4">Bangla</h3>
+                            </div>
+                            <p class="text-sky-400 font-bold">Native</p>
+                        </div>
+                        <div class="card-bg p-4 rounded-xl border border-gray-700 flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="w-10 flex justify-center">
+                                    <i class="fas fa-language text-2xl text-sky-400"></i>
+                                </div>
+                                <h3 class="font-semibold text-white text-lg ml-4">English</h3>
+                            </div>
+                            <p class="text-sky-400 font-bold">Professional</p>
+                        </div>
+                    </div>
+                </div>
+             </div>
+        </section>
+
+        <hr class="my-16 md:my-24 border-gray-700 reveal from-bottom">
+
+        <section id="contact">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 gradient-text reveal from-bottom">Get in Touch</h2>
+            <p class="text-center text-gray-400 max-w-2xl mx-auto mb-12 reveal from-bottom" style="transition-delay: 100ms;">Feel free to reach out to me</p>
+            
+            <div class="max-w-2xl mx-auto card-bg p-8 rounded-xl border border-gray-700 reveal from-bottom" style="transition-delay: 200ms;">
+                <form id="contact-form">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label for="user_name" class="block text-gray-300 mb-2">Name</label>
+                            <input type="text" name="user_name" id="user_name" class="w-full bg-black/20 border border-gray-600 rounded-lg py-2 px-4 text-white focus:outline-none focus:ring-2 focus:ring-sky-500" required>
+                        </div>
+                        <div>
+                            <label for="user_email" class="block text-gray-300 mb-2">Email</label>
+                            <input type="email" name="user_email" id="user_email" class="w-full bg-black/20 border border-gray-600 rounded-lg py-2 px-4 text-white focus:outline-none focus:ring-2 focus:ring-sky-500" required>
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <label for="message" class="block text-gray-300 mb-2">Message</label>
+                        <textarea name="message" id="message" rows="5" class="w-full bg-black/20 border border-gray-600 rounded-lg py-2 px-4 text-white focus:outline-none focus:ring-2 focus:ring-sky-500" required></textarea>
+                    </div>
+                    <button type="submit" class="w-full gradient-bg text-slate-900 font-semibold py-3 px-8 rounded-lg shadow-lg hover:scale-105 transform transition-transform duration-300">
+                        Send Message
+                    </button>
+                </form>
+                <p id="form-status" class="text-center mt-4"></p>
+            </div>
+
+            <div class="mt-12 max-w-2xl mx-auto reveal from-bottom" style="transition-delay: 300ms;">
+                <p class="text-center text-gray-400 mb-4">Connect with me on</p>
+                <div class="space-y-4">
+                    <a href="tel:+8801332634762" class="card-bg p-4 rounded-xl border border-gray-700 flex items-center hover:border-sky-500 transition-colors duration-300">
+                        <div class="w-10 flex justify-center">
+                            <i class="fas fa-phone text-2xl text-sky-400"></i>
+                        </div>
+                        <div class="ml-4 text-left">
+                            <h3 class="font-bold text-white">Phone</h3>
+                            <p class="text-gray-400">+8801332634762</p>
+                        </div>
+                    </a>
+                    <a href="https://www.linkedin.com/in/sajolshutrodhor/" target="_blank" class="card-bg p-4 rounded-xl border border-gray-700 flex items-center hover:border-sky-500 transition-colors duration-300">
+                        <div class="w-10 flex justify-center">
+                            <i class="fab fa-linkedin text-2xl text-sky-400"></i>
+                        </div>
+                        <div class="ml-4 text-left">
+                            <h3 class="font-bold text-white">LinkedIn</h3>
+                            <p class="text-gray-400">sajolshutrodhor</p>
+                        </div>
+                    </a>
+                    <a href="mailto:sajolshutrodhor@gmail.com" class="card-bg p-4 rounded-xl border border-gray-700 flex items-center hover:border-sky-500 transition-colors duration-300">
+                        <div class="w-10 flex justify-center">
+                            <i class="fas fa-envelope text-2xl text-sky-400"></i>
+                        </div>
+                        <div class="ml-4 text-left">
+                            <h3 class="font-bold text-white">Email</h3>
+                            <p class="text-gray-400">sajolshutrodhor@gmail.com</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="mt-24 mb-12 md:mb-20">
+            <div class="max-w-2xl mx-auto gradient-bg p-6 md:p-8 rounded-xl text-center reveal from-bottom">
+                <h2 class="text-2xl md:text-3xl font-bold text-slate-900">Ready to Grow Your Business?</h2>
+                <p class="mt-3 text-slate-800 hidden md:block">Let's discuss how we can achieve your digital marketing goals together.</p>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Wait for the entire page to load before running scripts
+        window.addEventListener('load', () => {
+            // Animate hero section on page load
+            const heroElements = document.querySelectorAll('#hero .reveal');
+            heroElements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.classList.add('visible');
+                }, 100 + (index * 200)); 
+            });
+
+            // Animate other sections on scroll
+            const revealElements = document.querySelectorAll('section:not(#hero) .reveal, hr.reveal');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        
+                        const progressBar = entry.target.querySelector('.progress-bar-fill');
+                        if (progressBar) {
+                            const progress = progressBar.getAttribute('data-progress');
+                            setTimeout(() => {
+                               progressBar.style.width = progress + '%';
+                            }, 200);
+                        }
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            revealElements.forEach(el => {
+                revealObserver.observe(el);
+            });
+            
+            // EmailJS Integration
+            (function() {
+                emailjs.init({
+                    publicKey: "FhIHCK7RZ3TMxW-5B", 
+                });
+            })();
+
+            const contactForm = document.getElementById('contact-form');
+            if(contactForm) {
+                contactForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const formStatus = document.getElementById('form-status');
+                    formStatus.textContent = 'Sending...';
+                    formStatus.style.color = '#e0e0e0';
+
+                    emailjs.sendForm('service_4hjd86h', 'template_sk5fn9e', this)
+                        .then(() => {
+                            formStatus.textContent = 'Message sent successfully!';
+                            formStatus.style.color = '#4ade80'; // Green color for success
+                            document.getElementById('contact-form').reset();
+                        }, (error) => {
+                            formStatus.textContent = 'Failed to send message. Please try again.';
+                            formStatus.style.color = '#f87171'; // Red color for error
+                            console.log('FAILED...', error);
+                        });
+                });
+            }
+
+            // Hide Header on Scroll Logic
+            const header = document.getElementById('animated-header');
+            if (header) {
+                let lastScrollY = window.scrollY;
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 50) {
+                        header.classList.add('header-hidden');
+                    } else {
+                        header.classList.remove('header-hidden');
+                    }
+                });
+            }
+
+            // Gemini API Logic for Marketing Ideas
+            const generateBtn = document.getElementById('generate-ideas-btn');
+            const businessInput = document.getElementById('business-input');
+            const ideasOutput = document.getElementById('ideas-output');
+            const loader = document.getElementById('loader');
+
+            const callGeminiApi = async (prompt) => {
+                const apiKey = "AIzaSyCDgr5EOGhec_ra3Pwfi0sX4BWBK9Y7mEY"; 
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                return result.candidates[0].content.parts[0].text;
+            };
+            
+            if (generateBtn) {
+                generateBtn.addEventListener('click', async () => {
+                    const businessDescription = businessInput.value;
+                    if (!businessDescription) {
+                        ideasOutput.innerHTML = '<p class="text-red-400">Please enter a business type first.</p>';
+                        return;
+                    }
+
+                    loader.style.display = 'block';
+                    ideasOutput.innerHTML = '';
+
+                    const prompt = `You are a helpful digital marketing assistant. For a business described as '${businessDescription}', generate 3 concise and actionable digital marketing strategy ideas. **Crucially, you must provide the entire response in the Bengali language.** Present them as a numbered list. For example: ১. প্রথম আইডিয়া। ২. দ্বিতীয় আইডিয়া। ৩. তৃতীয় আইডিয়া।`;
+                    
+                    try {
+                        const resultText = await callGeminiApi(prompt);
+                        const ideas = resultText.split('\n').filter(line => line.trim() !== '');
+                        const ideasHtml = ideas.map(idea => `
+                            <div class="card-bg p-4 rounded-xl border border-gray-700 mb-4">
+                                <p class="bengali-font text-white">${idea}</p>
+                            </div>
+                        `).join('');
+                        ideasOutput.innerHTML = ideasHtml;
+                    } catch (error) {
+                        ideasOutput.innerHTML = `<p class="text-red-400">Error: ${error.message}</p>`;
+                    } finally {
+                        loader.style.display = 'none';
+                    }
+                });
+            }
+            
+            // SEO Analyzer Logic
+            const analyzeBtn = document.getElementById('analyze-btn');
+            const urlInput = document.getElementById('url-input');
+            const seoReport = document.getElementById('seo-report');
+            const seoLoader = document.getElementById('seo-loader');
+            const progressText = document.getElementById('progress-text');
+
+            if (analyzeBtn) {
+                analyzeBtn.addEventListener('click', async () => {
+                    const url = urlInput.value;
+                    if (!url) {
+                        seoReport.innerHTML = '<p class="text-red-400">Please enter a website URL first.</p>';
+                        return;
+                    }
+
+                    seoLoader.style.display = 'block';
+                    seoReport.innerHTML = '';
+
+                    try {
+                        progressText.textContent = 'Analyzing SEO... This may take a moment.';
+                        const serverUrl = 'http://localhost:3000/analyze-seo'; 
+                        
+                        const response = await fetch(serverUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ url })
+                        });
+
+                        if (!response.ok) {
+                            const errorData = await response.json();
+                            throw new Error(errorData.error || 'Failed to fetch SEO data from the server.');
+                        }
+
+                        const data = await response.json();
+                        
+                        seoLoader.style.display = 'none';
+                        progressText.textContent = '';
+                        
+                        renderVisualReport(data);
+
+                    } catch (error) {
+                        seoLoader.style.display = 'none';
+                        seoReport.innerHTML = `<p class="text-red-400">Error: ${error.message}</p>`;
+                        console.error('SEO Analyzer Error:', error);
+                    }
+                });
+            }
+
+            function renderVisualReport(data) {
+                const { report, mozData } = data;
+
+                const seoHealthMatch = report.match(/\*\*SEO Health:\*\*.*?(\d+)/i);
+                const seoHealth = seoHealthMatch ? parseInt(seoHealthMatch[1], 10) : 75;
+
+                const strengthsMatch = report.match(/\*\*Strengths:\*\*\s*([\s\S]*?)\*\*Weaknesses:\*\*/i);
+                const strengths = strengthsMatch ? strengthsMatch[1].trim().split('\n').map(s => s.replace(/^- |\* /, '').trim()).filter(s => s) : [];
+
+                const weaknessesMatch = report.match(/\*\*Weaknesses:\*\*\s*([\s\S]*?)\*\*Actionable Suggestions:\*\*/i);
+                const weaknesses = weaknessesMatch ? weaknessesMatch[1].trim().split('\n').map(w => w.replace(/^- |\* /, '').trim()).filter(w => w) : [];
+
+                const suggestionsMatch = report.match(/\*\*Actionable Suggestions:\*\*\s*([\s\S]*)/i);
+                const suggestions = suggestionsMatch ? suggestionsMatch[1].trim().split('\n').map(s => s.replace(/^- |\* /, '').trim()).filter(s => s) : [];
+
+
+                seoReport.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="card-bg p-4 rounded-xl border border-gray-700 flex flex-col items-center justify-center">
+                            <h3 class="font-bold text-lg text-white mb-2">SEO Health</h3>
+                            <div class="relative w-32 h-32">
+                                <canvas id="seoHealthChart"></canvas>
+                                <div class="absolute inset-0 flex items-center justify-center text-2xl font-bold text-white">${seoHealth}%</div>
+                            </div>
+                        </div>
+                        <div class="card-bg p-4 rounded-xl border border-gray-700 flex flex-col items-center justify-center">
+                            <h3 class="font-bold text-lg text-white mb-2">Domain Authority</h3>
+                             <div class="relative w-32 h-32">
+                                <canvas id="daChart"></canvas>
+                                <div class="absolute inset-0 flex items-center justify-center text-2xl font-bold text-white">${mozData.domainAuthority}</div>
+                            </div>
+                        </div>
+                        <div class="card-bg p-4 rounded-xl border border-gray-700 flex flex-col items-center justify-center">
+                            <h3 class="font-bold text-lg text-white mb-2">Spam Score</h3>
+                            <div class="relative w-32 h-32">
+                                 <canvas id="spamScoreChart"></canvas>
+                                 <div class="absolute inset-0 flex items-center justify-center text-2xl font-bold text-white">${mozData.spamScore}%</div>
+                            </div>
+                        </div>
+                        <div class="card-bg p-4 rounded-xl border border-gray-700 flex flex-col items-center justify-center">
+                             <h3 class="font-bold text-lg text-white mb-2">Total Backlinks</h3>
+                             <p class="text-4xl font-bold text-white">${mozData.backlinks}</p>
+                        </div>
+                    </div>
+                    <div class="mt-6 space-y-4">
+                        <div class="card-bg rounded-xl border border-gray-700">
+                            <button class="accordion-header w-full flex justify-between items-center p-4">
+                                <h3 class="font-bold text-lg text-green-400 m-0">Strengths</h3>
+                                <i class="fas fa-chevron-down accordion-icon transition-transform"></i>
+                            </button>
+                            <div class="accordion-content">
+                                <ul class="text-gray-300">${strengths.map(s => `<li>${s}</li>`).join('')}</ul>
+                            </div>
+                        </div>
+                        <div class="card-bg rounded-xl border border-gray-700">
+                             <button class="accordion-header w-full flex justify-between items-center p-4">
+                                <h3 class="font-bold text-lg text-yellow-400 m-0">Weaknesses</h3>
+                                <i class="fas fa-chevron-down accordion-icon transition-transform"></i>
+                            </button>
+                            <div class="accordion-content">
+                                <ul class="text-gray-300">${weaknesses.map(w => `<li>${w}</li>`).join('')}</ul>
+                            </div>
+                        </div>
+                        <div class="card-bg rounded-xl border border-gray-700">
+                             <button class="accordion-header w-full flex justify-between items-center p-4">
+                                <h3 class="font-bold text-lg text-sky-400 m-0">Actionable Suggestions</h3>
+                                <i class="fas fa-chevron-down accordion-icon transition-transform"></i>
+                            </button>
+                            <div class="accordion-content">
+                                <ul class="text-gray-300">${suggestions.map(s => `<li>${s}</li>`).join('')}</ul>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Render Charts
+                createDoughnutChart('seoHealthChart', [seoHealth, 100 - seoHealth], ['#22c55e', '#374151']);
+                createDoughnutChart('daChart', [mozData.domainAuthority, 100 - mozData.domainAuthority], ['#38bdf8', '#374151']);
+                createDoughnutChart('spamScoreChart', [mozData.spamScore, 100 - mozData.spamScore], ['#ef4444', '#4b5563']);
+                
+                // Add accordion functionality
+                document.querySelectorAll('.accordion-header').forEach(header => {
+                    header.addEventListener('click', () => {
+                        header.classList.toggle('active');
+                    });
+                });
+            }
+            
+            function createDoughnutChart(canvasId, data, colors) {
+                const ctx = document.getElementById(canvasId).getContext('2d');
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        datasets: [{
+                            data: data,
+                            backgroundColor: colors,
+                            borderColor: 'var(--bg-color)',
+                            borderWidth: 2,
+                            cutout: '70%'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { enabled: false }
+                        },
+                        animation: {
+                            animateScale: true,
+                            animateRotate: true
+                        }
+                    }
+                });
+            }
+        });
+
+        // Function to download CV from Base64
+        function downloadCV() {
+            // --- গুরুত্বপূর্ণ নির্দেশনা ---
+            // আপনার নিজের CV-এর Base64 কোড এখানে যুক্ত করুন।
+            const placeholderBase64 = 'JVBERi0xLjQKJdPr6eEKMSAwIG9iago8PC9UeXBlL0NhdGFsb2cvUGFnZXMgMiAwIFI+PgplbmRvYmoKMiAwIG9iago8PC9UeXBlL1BhZ2VzL0tpZHNbMyAwIFJdL0NvdW50IDE+PgplbmRvYmoKMyAwIG9iago8PC9UeXBlL1BhZ2UvUGFyZW50IDIgMCBSL1Jlc291cmNlczw8L0ZvbnQ8PC9GMSAxMCAwIFI+Pj4+L01lZGlhQm94WzAgMCA1OTUgODQyXS9Db250ZW50cyA0IDAgUj4+CmVuZG9iago0IDAgb2JqCjw8L0xlbmd0aCA1MiA+PgpzdHJlYW0KQlQKICAvRjEgMjQgVGYKICAyMDAgNzAwIFRkCiAgKFNham9sIFNodXRybyBEaG9yIC0gQ1YpIFRqCkVUCmVuZHN0cmVhbQplbmRvYmoKNSAwIG9iago8PC9UeXBlL0ZvbnQvU3VidHlwZS9UeXBlMS9CYXNlRm9udC9IZWx2ZXRpY2E+PgplbmRvYmoKeHJlZgowIDYKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDE1IDAwMDAwIG4gCjAwMDAwMDAwNjMgMDAwMDAgbiAKMDAwMDAwMDAxMTYgMDAwMDAgbiAKMDAwMDAwMDIyMiAwMDAwMCBuIAowMDAwMDAwMzEwIDAwMDAwIG4gCnRyYWlsZXIKPDwvU2l6ZSA2L1Jvb3QgMSAwIFI+PgpzdGFydHhyZWYKMzYyCiUlRU9GCg==';
+
+            const byteCharacters = atob(placeholderBase64);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: 'application/pdf' });
+
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'Sajol_Shutro_Dhor_CV.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+        }
+    </script>
+
+</body>
+</html>
